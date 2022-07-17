@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+{% load cart %}
+{% load custom_filter %}
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+    integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+  <title>EWear</title>
+
+  <link rel="stylesheet" href="{% static 'index.css' %}">
+
+</head>
+
+<body>
+  <!-- navbar -->
+
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top"
+    style="background-color: transparent; backdrop-filter: blur(100px) brightness(.2);">
+    <div class="container-fluid">
+      <a class="navbar-brand" style="color: cornsilk" href="/">EWear</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" style="color: cornsilk"
+              href="/store/#products"><span>Store</span><span>&nbsp;</span><span><i class="fas fa-store"></i>
+              </span></i></a>
+          </li>
+        </ul>
+        <ul class="navbar-nav mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" style="color: cornsilk"
+              href="/cart/"><span>Cart</span><span>&nbsp;</span><span><i class="fas fa-shopping-cart"></i>
+              </span>
+              <span class="badge bg-info">{{request.session.cart.keys|length}}</span>
+            </a>
+          </li>
+
+          {% if request.session.customer %}
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false"
+              style="color: cornsilk;"><span>{{request.session.first_name}}</span><span>&nbsp;</span><span><i
+                  class="fas fa-user-circle"></i></span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/profile/"><span>Profile</span><span>&nbsp;</span><span><i
+                    class="fas fa-id-card"></i></span></a>
+              <a class="dropdown-item" href="/orders/"><span>Orders</span><span>&nbsp;</span><span><i
+                    class="fas fa-luggage-cart"></i></span></a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/logout/"><span>Logout</span><span>&nbsp;</span><span><i
+                    class="fas fa-sign-out-alt"></i>
+                </span></a>
+            </div>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" style="color: cornsilk"
+              href="/signup/"><span>Signup</span><span>&nbsp;</span><span><i class="fas fa-user-plus"></i>
+              </span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" style="color: cornsilk"
+              href="/login/"><span>Login</span><span>&nbsp;</span><span><i class="fas fa-sign-in-alt"></i></span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+
+  <div class="rt-container">
+    <div class="col-rt-12">
+      <!-- Slider -->
+      <div id="slider">
+        <div class="slides">
+          <div class="slider">
+            <div class="legend"></div>
+            <div class="content">
+              <div class="content-txt">
+                <div id="slide-text">
+                  <h1>Lorem ipsum dolor</h1>
+                  <p>Nam ultrices pellentesque facilisis. In semper tellus mollis nisl pulvinar vitae vulputate lorem
+                    consequat. Fusce odio tortor, pretium sit amet auctor ut, ultrices vel nibh.</p>
+                </div>
+                <a id="slide-button" href="/store/" class="btn btn-block btn-dark btn-outline-warning" role="button"
+                  aria-pressed="true">Shop now</a>
+              </div>
+            </div>
+            <div class="image"> <img src="{% static 'images/banner-01.jpg' %}"> </div>
+          </div>
+          <div class="slider">
+            <div class="legend"></div>
+            <div class="content">
+              <div class="content-txt">
+                <div id="slide-text">
+                  <h1>Lorem ipsum dolor</h1>
+                  <p>Nam ultrices pellentesque facilisis. In semper tellus mollis nisl pulvinar vitae vulputate lorem
+                    consequat. Fusce odio tortor, pretium sit amet auctor ut, ultrices vel nibh.</p>
+                </div>
+                <a id="slide-button" href="/store/" class="btn btn-block btn-dark btn-outline-warning" role="button"
+                  aria-pressed="true">Shop now</a>
+              </div>
+            </div>
+            <div class="image"> <img src="{% static 'images/banner-02.jpg' %}"> </div>
+          </div>
+          <div class="slider">
+            <div class="legend"></div>
+            <div class="content">
+              <div class="content-txt">
+                <div id="slide-text">
+                  <h1>Lorem ipsum dolor</h1>
+                  <p>Nam ultrices pellentesque facilisis. In semper tellus mollis nisl pulvinar vitae vulputate lorem
+                    consequat. Fusce odio tortor, pretium sit amet auctor ut, ultrices vel nibh.</p>
+                </div>
+                <a id="slide-button" href="/store/" class="btn btn-block btn-dark btn-outline-warning" role="button"
+                  aria-pressed="true">Shop now</a>
+              </div>
+            </div>
+            <div class="image"> <img src="{% static 'images/banner-03.jpg' %}"> </div>
+          </div>
+          <div class="slider">
+            <div class="legend"></div>
+            <div class="content">
+              <div class="content-txt">
+                <div id="slide-text">
+                  <h1>Lorem ipsum dolor</h1>
+                  <p>Nam ultrices pellentesque facilisis. In semper tellus mollis nisl pulvinar vitae vulputate lorem
+                    consequat. Fusce odio tortor, pretium sit amet auctor ut, ultrices vel nibh.</p>
+                </div>
+                <a id="slide-button" href="/store/" class="btn btn-block btn-dark btn-outline-warning" role="button"
+                  aria-pressed="true">Shop now</a>
+              </div>
+            </div>
+            <div class="image"> <img src="{% static 'images/banner-02.jpg' %}"> </div>
+          </div>
+        </div>
+        <div class="switch">
+          <ul>
+            <li>
+              <div class="on"></div>
+            </li>
+            <li></li>
+            <li></li>
+            <li></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="container-fluid text-center p-4 mt-5 fixed-bottom"
+    style="font-size: 20px; background-color: transparent; backdrop-filter: blur(100px) brightness(.2);">
+    <small>
+      <span style="font-size: large; color: cornsilk;">Supported Payment</span>
+      <span>&nbsp;</span>
+      <a href="#" style="color: cornsilk;"><i class="fab fa-cc-stripe fa-2x" id="fab"></i></a>
+      <span>&nbsp;</span>
+      <a href="#" style="color: cornsilk;"><i class="fab fa-cc-paypal fa-2x" id="fab"></i></a>
+      <span>&nbsp;</span>
+      <a href="#" style="color: cornsilk;"><i class="fab fa-cc-visa fa-2x" id="fab"></i></a>
+      <span>&nbsp;</span>
+      <a href="#" style="color: cornsilk;"><i class="fas fa-credit-card fa-2x" id="fas"></i></a>
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <span style="font-size: large; color: cornsilk;">Follow Us On</span>
+      <span>&nbsp;</span>
+      <a href="#" style="color: cornsilk;"><i class="fab fa-facebook fa-2x" id="fab"></i></a>
+      <span>&nbsp;</span>
+      <a href="#" style="color: cornsilk;"><i class="fab fa-twitter fa-2x" id="fab"></i></a>
+      <span>&nbsp;</span>
+      <a href="#" style="color: cornsilk;"><i class="fab fa-instagram fa-2x" id="fab"></i></a>
+      <span>&nbsp;</span>
+      <a href="#" style="color: cornsilk;"><i class="fab fa-youtube fa-2x" id="fab"></i></a>
+      <span>&nbsp;</span>
+    </small>
+  </footer>
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+    </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
+  <script>
+    $('.hero-slider').slick({
+      slidesToShow: 1,
+      prevArrow: $(".themes-carousel-controls .prev"),
+      nextArrow: $(".themes-carousel-controls .next"),
+      autoplay: true,
+      dots: false,
+      autoplaySpeed: 7000,
+      fade: true
+    });
+  </script>
+
+</body>
+
+</html>

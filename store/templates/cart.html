@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+{% load cart %}
+{% load custom_filter %}
+{% load static %}
+
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+    integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+  <title>Cart</title>
+  <link rel="stylesheet" href="{% static 'cart.css' %}">
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top"
+    style="background-color: transparent; backdrop-filter: blur(100px) brightness(.2);">
+    <div class="container-fluid">
+      <a class="navbar-brand" style="color: cornsilk" href="/">EWear</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" style="color: cornsilk"
+              href="/store/#products"><span>Store</span><span>&nbsp;</span><span><i class="fas fa-store"></i>
+              </span></i></a>
+          </li>
+        </ul>
+        <ul class="navbar-nav mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" style="color: cornsilk"
+              href="/cart/"><span>Cart</span><span>&nbsp;</span><span><i class="fas fa-shopping-cart"></i>
+              </span>
+              <span class="badge bg-info">{{request.session.cart.keys|length}}</span>
+            </a>
+          </li>
+
+          {% if request.session.customer %}
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false"
+              style="color: cornsilk;"><span>{{request.session.first_name}}</span><span>&nbsp;</span><span><i
+                  class="fas fa-user-circle"></i></span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/profile/"><span>Profile</span><span>&nbsp;</span><span><i
+                    class="fas fa-id-card"></i></span></a>
+              <a class="dropdown-item" href="/orders/"><span>Orders</span><span>&nbsp;</span><span><i
+                    class="fas fa-luggage-cart"></i></span></a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/logout/"><span>Logout</span><span>&nbsp;</span><span><i
+                    class="fas fa-sign-out-alt"></i>
+                </span></a>
+            </div>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" style="color: cornsilk"
+              href="/signup/"><span>Signup</span><span>&nbsp;</span><span><i class="fas fa-user-plus"></i>
+              </span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" style="color: cornsilk"
+              href="/login/"><span>Login</span><span>&nbsp;</span><span><i class="fas fa-sign-in-alt"></i></span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <div class="border rounded border-0 p-5 m-5"
+      style="color: cornsilk ;background-color: transparent; backdrop-filter: blur(100px) brightness(.2);">
+
+      <p class="display-4 pl-5 ml-5">Your Cart</p>
+      <hr>
+      <table class="table" style="color: cornsilk;">
+        {% if request.session.cart.keys %}
+        <thead>
+          <tr>
+            <th>Serial</th>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>&nbsp;</th>
+            <th>Quantity</th>
+            <th>&nbsp;</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          {% for product in products %}
+
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td><img style="height: 100px; width: 80px;" class="border rounded" src="{{product.image.url}}" alt=""></td>
+            <td>{{product.name}}</td>
+            <td>{{product.price|currency}}</td>
+            <td>
+              <div class="row">
+                <form action="#" method="post">
+                  {% csrf_token %}
+                  <input hidden type="text" name="product" value="{{product.id}}">
+                  <input hidden type="text" name="remove" value="True">
+                  <button type="submit" class="btn btn-block btn-dark btn-outline-warning" id="cart_quantity"><span><i
+                        class="fas fa-minus"></i></span></button>
+                </form>
+              </div>
+            </td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ product|cart_quantity:request.session.cart }}</td>
+            <td>
+              <div class="row">
+                <form action="#" method="post">
+                  {% csrf_token %}
+                  <input hidden type="text" name="product" value="{{product.id}}">
+                  <button type="submit" class="btn btn-block btn-dark btn-outline-warning" id="cart_quantity"><span><i
+                        class="fas fa-plus"></i></span></button>
+                </form>
+              </div>
+            </td>
+            <td id="{{product.quantity}}">{{product|price_total:request.session.cart|currency}}</td>
+          </tr>
+
+          {% endfor %}
+
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="3"></th>
+            <th>Total</th>
+            <th>{{products|total_cart_price:request.session.cart|currency}}</th>
+          </tr>
+        </tfoot>
+        {% else %}
+        <h1 style="text-align: center;">Your Cart is empty</h1>
+        {% endif %}
+      </table>
+      <hr>
+
+
+
+      <div class="m-4 p-4">
+        <a href="#" data-toggle="modal" data-target="#exampleModal"
+          class="btn btn-dark btn-outline-warning border rounded col-lg-4" style="float:right"><span>Check
+            out</span><span>&nbsp;</span><span><i class="fas fa-shopping-bag"></i></span></a>
+      </div>
+
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header" style="backdrop-filter: blur(100px);">
+            <h4 class="modal-title" id="exampleModalLabel">Shipping Information</h4>
+            <hr>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="m-2 p-3" style="backdrop-filter: blur(100px)">
+              <form action="/checkout/" method="POST">
+                {% csrf_token %}
+
+                <div class="form-group" style="padding-bottom: 10px;">
+                  <label for="">Address</label>
+                  <input type="text" name="address" id="" class="form-control" placeholder="" aria-describedby="helpId">
+
+                </div>
+                <div class="form-group" style="padding-bottom: 20px;">
+                  <label for="">Phone</label>
+                  <input type="text" name="phone" id="" class="form-control" placeholder="" aria-describedby="helpId">
+
+                </div>
+
+                <button type="submit" class="btn btn-dark btn-outline-warning border rounded col-lg-6"
+                  style="float: right;"><span>Check
+                    out</span><span>&nbsp;</span><span><i class="fas fa-shopping-bag"></i></span></button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="container-fluid text-center p-2 mt-5 fixed-bottom"
+      style="font-size: 20px; background-color: transparent; backdrop-filter: blur(100px) brightness(.2);">
+      <small>
+        <span style="font-size: large; color: cornsilk;">Supported Payment</span>
+        <span>&nbsp;</span>
+        <a href="#" style="color: cornsilk;"><i class="fab fa-cc-stripe fa-2x" id="fab"></i></a>
+        <span>&nbsp;</span>
+        <a href="#" style="color: cornsilk;"><i class="fab fa-cc-paypal fa-2x" id="fab"></i></a>
+        <span>&nbsp;</span>
+        <a href="#" style="color: cornsilk;"><i class="fab fa-cc-visa fa-2x" id="fab"></i></a>
+        <span>&nbsp;</span>
+        <a href="#" style="color: cornsilk;"><i class="fas fa-credit-card fa-2x" id="fas"></i></a>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span style="font-size: large; color: cornsilk;">Follow Us On</span>
+        <span>&nbsp;</span>
+        <a href="#" style="color: cornsilk;"><i class="fab fa-facebook fa-2x" id="fab"></i></a>
+        <span>&nbsp;</span>
+        <a href="#" style="color: cornsilk;"><i class="fab fa-twitter fa-2x" id="fab"></i></a>
+        <span>&nbsp;</span>
+        <a href="#" style="color: cornsilk;"><i class="fab fa-instagram fa-2x" id="fab"></i></a>
+        <span>&nbsp;</span>
+        <a href="#" style="color: cornsilk;"><i class="fab fa-youtube fa-2x" id="fab"></i></a>
+        <span>&nbsp;</span>
+      </small>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+      </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+      </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+      </script>
+    <script>
+      $(window).scroll(function () {
+        //set scroll position in session storage
+        sessionStorage.scrollPos = $(window).scrollTop();
+      });
+      var init = function () {
+        //get scroll position in session storage
+        $(window).scrollTop(sessionStorage.scrollPos || 0)
+      };
+      window.onload = init;
+    </script>
+
+</body>
+
+</html>
